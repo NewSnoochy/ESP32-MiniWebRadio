@@ -51,7 +51,7 @@ class TFT_SPI : public TFT_Base {
     bool        panelDrawBitmap(int16_t x0, int16_t y0, int16_t x1, int16_t y1, const void* bitmap) override;
     void        displayInversion();
 
-    enum Ctrl { ILI9341 = 0, ILI9486 = 3, ILI9488 = 4, ST7796 = 5 };
+    enum Ctrl { ILI9341 = 0, ILI9486 = 3, ILI9488 = 4, ST7796 = 5, ST7789 = 6 };
     uint8_t     _TFTcontroller = ILI9341;
     SPISettings SPIset; // SPI settings for this slave
 

@@ -3,7 +3,7 @@
 
 #include "settings.h"
 
-#if TFT_CONTROLLER == 0
+#if TFT_CONTROLLER == 0 || TFT_CONTROLLER == 6
     #define TFT_MODE_SPI
     #define TFT_LAYOUT_S
 #endif

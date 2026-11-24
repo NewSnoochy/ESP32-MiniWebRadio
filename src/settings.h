@@ -2,13 +2,13 @@
 #include "Arduino.h"
 #include "tft_structures.h"
 
-#define TFT_CONTROLLER    5                // (0)SPI-ILI9341[320x240], (3)SPI-ILI9486[480x320], (4)SPI-ILI9488[480x320], (5)SPI-ST7796[480x320], (7)RGB[800x480], (8)DSI-EK97001[1024x600], (9)DSI-JD9165[1024x600], (10)ST7701[480x800]
+#define TFT_CONTROLLER    6                // (0)SPI-ILI9341[320x240], (3)SPI-ILI9486[480x320], (4)SPI-ILI9488[480x320], (5)SPI-ST7796[480x320], (6)SPI-ST7789[320x240], (7)RGB[800x480], (8)DSI-EK97001[1024x600], (9)DSI-JD9165[1024x600], (10)ST7701[480x800]
 #define DISPLAY_INVERSION 0                // only SPI displays, (0) off (1) on
 #define TFT_ROTATION      0                // (0) none, (1) 90°CW, (2) 180°CW, (3) 270°CW
-#define TFT_FREQUENCY     40000000         // only SPI displays, 80000000, 40000000, 27000000, 20000000, 10000000
-#define TP_CONTROLLER     2                // (0)XPT2046 2.8", (1)XPT2046 3.5", (2)XPT2046 4.0", (7)GT911, (8)FT6x63
-#define TP_ROTATION       2                // (0) none, (1) 90°CW, (2) 180°CW, (3) 270°CW
-#define TP_H_MIRROR       0                // (0) default, (1) mirror up <-> down
+#define TFT_FREQUENCY     80000000         // only SPI displays, 80000000, 40000000, 27000000, 20000000, 10000000
+#define TP_CONTROLLER     8                // (0)XPT2046 2.8", (1)XPT2046 3.5", (2)XPT2046 4.0", (7)GT911, (8)FT6x63
+#define TP_ROTATION       1                // (0) none, (1) 90°CW, (2) 180°CW, (3) 270°CW — may need tuning
+#define TP_H_MIRROR       1                // (0) default, (1) mirror up <-> down
 #define TP_V_MIRROR       0                // (0) default, (1) mirror left <-> right
 #define I2S_COMM_FMT      0                // (0) MAX98357A PCM5102A CS4344, (1) LSBJ (Least Significant Bit Justified format) PT8211
 #define SDMMC_FREQUENCY   80000000         // 80000000 or 40000000 Hz
@@ -25,30 +25,30 @@
 
 #if TFT_CONTROLLER < 7
     #if CONFIG_IDF_TARGET_ESP32S3
-    // Digital I/O used
-        #define TFT_CS             8
-        #define TFT_DC             12
-        #define TFT_BL             10 // at -1 the brightness menu is not displayed
-        #define TP_IRQ             39
-        #define TP_CS              15
-        #define SD_MMC_D0          11
-        #define SD_MMC_CLK         13
-        #define SD_MMC_CMD         14
-        #define IR_PIN             4  // IR Receiver (if available)
-        #define TFT_MOSI           18 // TFT and TP (FSPI)
-        #define TFT_MISO           2  // TFT and TP (FSPI)
-        #define TFT_SCK            17 // TFT and TP (FSPI)
-        #define I2S_DOUT           9
-        #define I2S_BCLK           3
-        #define I2S_LRC            1
-        #define I2S_MCLK           0
-        #define BT_EMITTER_RX      45 // TX pin - KCX Bluetooth Transmitter    (-1 if not available)
-        #define BT_EMITTER_TX      38 // RX pin - KCX Bluetooth Transmitter    (-1 if not available)
-        #define BT_EMITTER_MODE    20 // high transmit - low receive           (-1 if not available)
-        #define BT_EMITTER_CONNECT 48 // high impulse -> awake after POWER_OFF (-1 if not available)
-        #define I2C_SDA            41 // I2C, dala line for capacitive touchpadand and light sensor (-1 if not available)
-        #define I2C_SCL            42 // I2C, clock line for capacitive touchpadand and light sensor (-1 if not available)
-        #define AMP_ENABLED        -1 // onboard amplifier (-1 if not available)
+    // Freenove FNK0086 (ESP32-S3, ST7789 240x320, FT6336U touch, MAX98357A I2S DAC)
+        #define TFT_CS             47
+        #define TFT_DC             0
+        #define TFT_BL             -1  // no MCU backlight control on FNK0086
+        #define TP_IRQ             -1  // FT6336U uses I2C only
+        #define TP_CS              -1  // not used (I2C touch)
+        #define SD_MMC_D0          40
+        #define SD_MMC_CLK         39
+        #define SD_MMC_CMD         38
+        #define IR_PIN             -1
+        #define TFT_MOSI           20  // HSPI MOSI
+        #define TFT_MISO           -1  // not used
+        #define TFT_SCK            21  // HSPI SCK
+        #define I2S_DOUT           41
+        #define I2S_BCLK           42
+        #define I2S_LRC            14
+        #define I2S_MCLK           -1
+        #define BT_EMITTER_RX      -1
+        #define BT_EMITTER_TX      -1
+        #define BT_EMITTER_MODE    -1
+        #define BT_EMITTER_CONNECT -1
+        #define I2C_SDA             2  // FT6336U SDA
+        #define I2C_SCL             1  // FT6336U SCL
+        #define AMP_ENABLED        -1
     #endif                            // CONFIG_IDF_TARGET_ESP32S3
 
     #if CONFIG_IDF_TARGET_ESP32P4
